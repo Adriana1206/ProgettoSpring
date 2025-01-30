@@ -231,8 +231,8 @@ public class LibroService implements IfaceLibroService {
 		return libroDTO;
 	}
 
-	// WebClient per ottenere i libri dall'endpoint esterno
-	@Transactional(propagation = Propagation.REQUIRED) // Rollback automatico
+	// WebClient 
+	@Transactional(propagation = Propagation.REQUIRED) 
 	@Override
 	public List<LibroDTO> libriFromExternalEndpoint() {
 		List<LibroDTO> libri = new ArrayList<LibroDTO>();
