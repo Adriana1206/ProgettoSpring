@@ -3,7 +3,9 @@ package com.example.demo.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,43 +30,139 @@ public class AutoreController {
 	//riceve il contenuto JSON e lo converte automaticamente in un oggetto Java AutoreDTO 
 	@PostMapping("") //aggiungere un autore
 	public ResponseEntity<AutoreDTO> aggiungiAutore(@RequestBody AutoreDTO autoreDTO){
-		AutoreDTO nuovoAutore = autoreService.saveAutore(autoreDTO);
-		return ResponseEntity.ok(nuovoAutore);
+		try {
+			AutoreDTO nuovoAutore = autoreService.saveAutore(autoreDTO);
+			return ResponseEntity.ok(nuovoAutore);
+		} catch (IllegalArgumentException e) {
+			// Gestisce gli errori di validazione (ad esempio, autore non trovato)
+			throw new IllegalArgumentException(e.getMessage());
+		} catch (DataAccessException e) {
+			// Gestisce gli errori di accesso al database
+			throw new IllegalArgumentException(e.getMessage());
+
+		} catch (Exception e) {
+			// Gestisce qualsiasi altro errore imprevisto
+			throw new IllegalArgumentException(e.getMessage());
+		}
+		
 	}
 	
 	//modificare un libro
 	@PutMapping("")
 	public ResponseEntity<AutoreDTO> modificaAutore(@RequestBody AutoreDTO autoreDTO){
-		AutoreDTO nuovoAutore = autoreService.saveAutore(autoreDTO);
-		return ResponseEntity.ok(nuovoAutore);
+		try {
+			AutoreDTO nuovoAutore = autoreService.saveAutore(autoreDTO);
+			return ResponseEntity.ok(nuovoAutore);
+		} catch (IllegalArgumentException e) {
+			// Gestisce gli errori di validazione 
+			throw new IllegalArgumentException(e.getMessage());
+		} catch (DataAccessException e) {
+			// Gestisce gli errori di accesso al database
+			throw new IllegalArgumentException(e.getMessage());
+
+		} catch (Exception e) {
+			// Gestisce qualsiasi altro errore imprevisto
+			throw new IllegalArgumentException(e.getMessage());
+		}
+		
+		
 	}
 	
 	//lista autori
 	@GetMapping("")
 	public ResponseEntity<List<AutoreDTO>> getAutori(){
-		List<AutoreDTO> autoriDTO = autoreService.getAutori();
-		return ResponseEntity.ok(autoriDTO);
+		try {
+			List<AutoreDTO> autoriDTO = autoreService.getAutori();
+			return ResponseEntity.ok(autoriDTO);
+		} catch (IllegalArgumentException e) {
+			// Gestisce gli errori di validazione 
+			throw new IllegalArgumentException(e.getMessage());
+		} catch (DataAccessException e) {
+			// Gestisce gli errori di accesso al database
+			throw new IllegalArgumentException(e.getMessage());
+
+		} catch (Exception e) {
+			// Gestisce qualsiasi altro errore imprevisto
+			throw new IllegalArgumentException(e.getMessage());
+		}
+		
 	}
 	
 	//autore tramite id
 	@GetMapping("/{id}")
 	public AutoreDTO getAutore(@PathVariable Long id){
-		AutoreDTO autore = autoreService.getAutore(id);
+		try {
+			AutoreDTO autore = autoreService.getAutore(id);	
+			return autore;
+		}catch (IllegalArgumentException e) {
+			// Gestisce gli errori di validazione 
+			throw new IllegalArgumentException(e.getMessage());
+		} catch (DataAccessException e) {
+			// Gestisce gli errori di accesso al database
+			throw new IllegalArgumentException(e.getMessage());
+
+		} catch (Exception e) {
+			// Gestisce qualsiasi altro errore imprevisto
+			throw new IllegalArgumentException(e.getMessage());
+		}
 		
-		return autore;
 	}
 	
 	//cancella autore
+	@DeleteMapping("/{id}")
 	public void cancellaAutore(@PathVariable Long id) {
-		autoreService.eliminaAutore(id);
+		try {
+			autoreService.eliminaAutore(id);
+		}catch (IllegalArgumentException e) {
+			// Gestisce gli errori di validazione 
+			throw new IllegalArgumentException(e.getMessage());
+		} catch (DataAccessException e) {
+			// Gestisce gli errori di accesso al database
+			throw new IllegalArgumentException(e.getMessage());
+
+		} catch (Exception e) {
+			// Gestisce qualsiasi altro errore imprevisto
+			throw new IllegalArgumentException(e.getMessage());
+		}
+		
 	}
 	
 	@GetMapping("/search/{search}")
 	public List<AutoreDTO> cercaAutore(@PathVariable String search){
-		return autoreService.cercaAutore(search);
+		try {
+			return autoreService.cercaAutore(search);
+		}catch (IllegalArgumentException e) {
+			// Gestisce gli errori di validazione 
+			throw new IllegalArgumentException(e.getMessage());
+		} catch (DataAccessException e) {
+			// Gestisce gli errori di accesso al database
+			throw new IllegalArgumentException(e.getMessage());
+
+		} catch (Exception e) {
+			// Gestisce qualsiasi altro errore imprevisto
+			throw new IllegalArgumentException(e.getMessage());
+		}
+		
+		
 	}
 	
-	
+	@PostMapping("/autoriFromExternalEndpoint")
+	public List<AutoreDTO> autoriFromExternalEndpoint() throws Exception{
+		try {
+			return autoreService.autoriFromExternalEndpoint();
+		}catch (IllegalArgumentException e) {
+			// Gestisce gli errori di validazione 
+			throw new IllegalArgumentException(e.getMessage());
+		} catch (DataAccessException e) {
+			// Gestisce gli errori di accesso al database
+			throw new IllegalArgumentException(e.getMessage());
+
+		} catch (Exception e) {
+			// Gestisce qualsiasi altro errore imprevisto
+			throw new IllegalArgumentException(e.getMessage());
+		}
+		
+	}
 }
 
 

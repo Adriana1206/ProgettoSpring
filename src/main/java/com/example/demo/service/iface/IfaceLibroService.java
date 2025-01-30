@@ -3,13 +3,12 @@ package com.example.demo.service.iface;
 import java.util.List;
 import com.example.demo.DTO.LibroDTO;
 
+
 public interface IfaceLibroService {
 
-	public LibroDTO saveLibro(LibroDTO libroDTO);
+		public LibroDTO saveLibro(LibroDTO libroDTO);
 	
-	//elenco libri
-		public List<LibroDTO> getLibri();
-		
+	    
 		
 		//libro by id
 		//findById restituisce un Optional
@@ -20,4 +19,10 @@ public interface IfaceLibroService {
 		
 		//cercare un libro tramite una stringa
 		public List<LibroDTO> cercaLibro(String search);
+		
+		public List<LibroDTO> libriFromExternalEndpoint();
+
+
+
+		List<LibroDTO> getLibri();
 }
