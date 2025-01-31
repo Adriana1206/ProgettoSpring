@@ -127,6 +127,8 @@ public class AutoreController {
 		
 	}
 	
+	
+	//cerca autore tramite una stringa
 	@GetMapping("/search/{search}")
 	public List<AutoreDTO> cercaAutore(@PathVariable String search){
 		try {
@@ -141,10 +143,11 @@ public class AutoreController {
 		} catch (Exception e) {
 			// Gestisce qualsiasi altro errore imprevisto
 			throw new IllegalArgumentException(e.getMessage());
-		}
-		
+		}	
 		
 	}
+	
+
 	
 	@PostMapping("/autoriFromExternalEndpoint")
 	public List<AutoreDTO> autoriFromExternalEndpoint() throws Exception{

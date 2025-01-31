@@ -22,7 +22,7 @@ public interface IfaceLibroService {
 		
 		public List<LibroDTO> libriFromExternalEndpoint();
 
-
-
 		List<LibroDTO> getLibri();
+
+		List<LibroDTO> getBooksByAuthor(String search);
 }

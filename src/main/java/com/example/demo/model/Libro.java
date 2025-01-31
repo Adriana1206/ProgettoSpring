@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
@@ -18,6 +19,7 @@ public class Libro {
     private String titolo; 
     
     @ManyToOne  //gni libro ha un autore, e molti libri possono avere lo stesso autore
+    @JoinColumn(name = "autore_id")
     private Autore autore;
     
     private Integer annoPubblicazione; 
@@ -27,8 +29,9 @@ public class Libro {
     public Libro() {
     }
 
-    public Libro(String titolo,Autore autore, Integer annoPubblicazione, BigDecimal prezzo) {
-        this.titolo = titolo;
+    public Libro(Long id, String titolo,Autore autore, Integer annoPubblicazione, BigDecimal prezzo) {
+        this.id = id;
+    	this.titolo = titolo;
         this.autore = autore;
         this.annoPubblicazione = annoPubblicazione;
         this.prezzo = prezzo;

@@ -39,98 +39,91 @@ public class LibroService implements IfaceLibroService {
 	public LibroService(WebClient.Builder webClientBuilder) {
 		this.webClient = webClientBuilder.baseUrl("https://dummyjson.com").build();
 	}
-	
-	
+
 	/*
 	 * public LibroDTO saveLibro(LibroDTO libroDTO) {
-
-		try {
-
-			// Recupero l'autore utilizzando l'id
-			Autore autore = autoreService.getAutore(libroDTO.getAutoreId()).orElse(null);
-			
-			//indById di per sé restituisce un Optional<Autore>, 
-			//ma il orElse(null) converte il risultato in un oggetto Autore o null
-			//Se autore è null (perché l'Optional non contiene un valore), stai cercando di 
-			//impostare un valore null nel campo autore di un oggetto Libro.
-
-
-			if (autore == null) { throw new IllegalArgumentException("Autore con ID " +libroDTO.getAutoreId() + " non trovato"); }
-			Libro libro = new Libro();
-			libro.setTitolo(libroDTO.getTitolo());
-			libro.setId(libroDTO.getId());
-			libro.setAnnoPubblicazione(libroDTO.getAnnoPubblicazione());
-			libro.setPrezzo(libroDTO.getPrezzo());
-			libro.setAutore(autore);
-
-			Libro libroUpdated = libroRepository.saveAndFlush(libro);// salva il libro nel DB
-			return convertEntityDTO(libroUpdated);
-		} catch (DataAccessException e) {
-			// Gestione degli errori relativi all'accesso al database
-			throw new IllegalArgumentException(e.getMessage());
-		} catch (IllegalArgumentException e) {
-			throw new IllegalArgumentException(e.getMessage());
-		} catch (Exception e) {
-			// Gestione di altri errori imprevisti
-			throw new IllegalArgumentException(e.getMessage());
-		}
-
-	}
+	 * 
+	 * try {
+	 * 
+	 * // Recupero l'autore utilizzando l'id Autore autore =
+	 * autoreService.getAutore(libroDTO.getAutoreId()).orElse(null);
+	 * 
+	 * //indById di per sé restituisce un Optional<Autore>, //ma il orElse(null)
+	 * converte il risultato in un oggetto Autore o null //Se autore è null (perché
+	 * l'Optional non contiene un valore), stai cercando di //impostare un valore
+	 * null nel campo autore di un oggetto Libro.
+	 * 
+	 * 
+	 * if (autore == null) { throw new IllegalArgumentException("Autore con ID "
+	 * +libroDTO.getAutoreId() + " non trovato"); } Libro libro = new Libro();
+	 * libro.setTitolo(libroDTO.getTitolo()); libro.setId(libroDTO.getId());
+	 * libro.setAnnoPubblicazione(libroDTO.getAnnoPubblicazione());
+	 * libro.setPrezzo(libroDTO.getPrezzo()); libro.setAutore(autore);
+	 * 
+	 * Libro libroUpdated = libroRepository.saveAndFlush(libro);// salva il libro
+	 * nel DB return convertEntityDTO(libroUpdated); } catch (DataAccessException e)
+	 * { // Gestione degli errori relativi all'accesso al database throw new
+	 * IllegalArgumentException(e.getMessage()); } catch (IllegalArgumentException
+	 * e) { throw new IllegalArgumentException(e.getMessage()); } catch (Exception
+	 * e) { // Gestione di altri errori imprevisti throw new
+	 * IllegalArgumentException(e.getMessage()); }
+	 * 
+	 * }
 	 */
 
 	@Transactional(propagation = Propagation.REQUIRED) // Rollback automatico
 	@Override
 	public LibroDTO saveLibro(LibroDTO libroDTO) {
 
-	    try {
-	        // Recupero l'autore utilizzando l'id
-	        AutoreDTO autoreDTO = autoreService.getAutore(libroDTO.getAutoreId());
+		try {
+			// Recupero l'autore utilizzando l'id
+			AutoreDTO autoreDTO = autoreService.getAutore(libroDTO.getAutoreId());
 
-	        // Verifica se l'autore è stato trovato
-	        if (autoreDTO == null) {
-	            throw new IllegalArgumentException("Autore con ID " + libroDTO.getAutoreId() + " non trovato");
-	        }
+			// Verifica se l'autore è stato trovato
+			if (autoreDTO == null) {
+				throw new IllegalArgumentException("Autore con ID " + libroDTO.getAutoreId() + " non trovato");
+			}
 
-	        // Converte l'AutoreDTO in un oggetto Autore
-	        Autore autore = convertDTOToEntity(autoreDTO);
+			// Converte l'AutoreDTO in un oggetto Autore
+			Autore autore = convertDTOToEntity(autoreDTO);
 
-	        // Crea il libro
-	        Libro libro = new Libro();
-	        libro.setTitolo(libroDTO.getTitolo());
-	        libro.setId(libroDTO.getId());
-	        libro.setAnnoPubblicazione(libroDTO.getAnnoPubblicazione());
-	        libro.setPrezzo(libroDTO.getPrezzo());
-	        libro.setAutore(autore); // Imposta l'autore nel libro
+			// Crea il libro
+			Libro libro = new Libro();
+			libro.setTitolo(libroDTO.getTitolo());
+			libro.setId(libroDTO.getId());
+			libro.setAnnoPubblicazione(libroDTO.getAnnoPubblicazione());
+			libro.setPrezzo(libroDTO.getPrezzo());
+			libro.setAutore(autore); // Imposta l'autore nel libro
 
-	        // Salva il libro nel DB
-	        //flush garantisce che le modifiche vengano applicate immediatamente nel database
-	        Libro libroUpdated = libroRepository.saveAndFlush(libro);
-	        
-	        // Converte l'entità Libro in DTO per restituirlo al client
-	        return convertEntityDTO(libroUpdated);
+			// Salva il libro nel DB
+			// flush garantisce che le modifiche vengano applicate immediatamente nel
+			// database
+			Libro libroUpdated = libroRepository.saveAndFlush(libro);
 
-	    } catch (DataAccessException e) {
-	        // Gestione degli errori relativi all'accesso al database
-	        throw new IllegalArgumentException("Errore nell'accesso al database: " + e.getMessage());
-	    } catch (IllegalArgumentException e) {
-	        // Gestione degli errori nei dati forniti
-	        throw new IllegalArgumentException("Errore nei dati forniti: " + e.getMessage());
-	    } catch (Exception e) {
-	        // Gestione di altri errori imprevisti
-	        throw new IllegalArgumentException("Errore imprevisto: " + e.getMessage());
-	    }
+			// Converte l'entità Libro in DTO per restituirlo al client
+			return convertEntityDTO(libroUpdated);
+
+		} catch (DataAccessException e) {
+			// Gestione degli errori relativi all'accesso al database
+			throw new IllegalArgumentException("Errore nell'accesso al database: " + e.getMessage());
+		} catch (IllegalArgumentException e) {
+			// Gestione degli errori nei dati forniti
+			throw new IllegalArgumentException("Errore nei dati forniti: " + e.getMessage());
+		} catch (Exception e) {
+			// Gestione di altri errori imprevisti
+			throw new IllegalArgumentException("Errore imprevisto: " + e.getMessage());
+		}
 	}
 
-	// Metodo di conversione da AutoreDTO a Autore 
+	// Metodo di conversione da AutoreDTO a Autore
 	private Autore convertDTOToEntity(AutoreDTO autoreDTO) {
-	    Autore autore = new Autore();
-	    autore.setId(autoreDTO.getId());
-	    autore.setNome(autoreDTO.getNome()); 
-	    autore.setCognome(autoreDTO.getCognome()); 
-	    
-	    return autore;
-	}
+		Autore autore = new Autore();
+		autore.setId(autoreDTO.getId());
+		autore.setNome(autoreDTO.getNome());
+		autore.setCognome(autoreDTO.getCognome());
 
+		return autore;
+	}
 
 	@Override
 	public List<LibroDTO> getLibri() {
@@ -219,6 +212,37 @@ public class LibroService implements IfaceLibroService {
 		return libriDTO;
 	}
 
+	
+	//ritorna i libri di un autore 
+	@Override
+	public List<LibroDTO> getBooksByAuthor(String search){
+	    List<LibroDTO> libriDTO = new ArrayList<>();
+	    try {
+	        // query per cercare libri nel DB
+	        List<Libro> libri = libroRepository.getBooksByAuthor(search);
+	        
+	        if (libri.isEmpty()) {
+	            // Log per capire che la lista è vuota
+	            System.out.println("Nessun libro trovato per la ricerca: " + search);
+	            throw new IllegalArgumentException("Nessun libro trovato per la ricerca: " + search);
+	        }
+	        
+	        for (Libro libro : libri) {
+	            libriDTO.add(convertEntityDTO(libro)); // Converte ogni libro in un LibroDTO
+	        }
+	    } catch (DataAccessException e) {
+	        // Log per l'eccezione di accesso ai dati
+	        System.out.println("Errore di accesso ai dati: " + e.getMessage());
+	        throw new IllegalArgumentException(e.getMessage());
+	    } catch (Exception e) {
+	        // Log per altre eccezioni
+	        System.out.println("Errore generico: " + e.getMessage());
+	        throw new IllegalArgumentException(e.getMessage());
+	    }
+	    
+	    return libriDTO;
+	}
+
 	private LibroDTO convertEntityDTO(Libro libro) {
 
 		LibroDTO libroDTO = new LibroDTO();
@@ -231,8 +255,8 @@ public class LibroService implements IfaceLibroService {
 		return libroDTO;
 	}
 
-	// WebClient 
-	@Transactional(propagation = Propagation.REQUIRED) 
+	// WebClient
+	@Transactional(propagation = Propagation.REQUIRED)
 	@Override
 	public List<LibroDTO> libriFromExternalEndpoint() {
 		List<LibroDTO> libri = new ArrayList<LibroDTO>();

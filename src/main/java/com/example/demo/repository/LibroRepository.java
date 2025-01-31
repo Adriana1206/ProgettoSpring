@@ -10,5 +10,9 @@ public interface LibroRepository extends JpaRepository<Libro, Long>{
 	
 	//metodo per cercare i libri per titolo o autore
 	List<Libro> getByTitolOrAuthor(String search);
+	
+	
+	//metodo per cercare tutti i libri scritti da un autore
+	List<Libro> getBooksByAuthor(String search);
 
 }
