@@ -149,6 +149,24 @@ public class LibroController {
 		}
 		
 	}
+	
+	//cerca tutti i libri di un autore
+	@GetMapping("/searchLibriAutore/{search}")
+	public List<LibroDTO> cercaLibriAutore(@PathVariable String search){
+		try {
+			return libroService.getBooksByAuthor(search);
+		}catch (IllegalArgumentException e) {
+			// Gestisce gli errori di validazione 
+			throw new IllegalArgumentException(e.getMessage());
+		} catch (DataAccessException e) {
+			// Gestisce gli errori di accesso al database
+			throw new IllegalArgumentException(e.getMessage());
+
+		} catch (Exception e) {
+			// Gestisce qualsiasi altro errore imprevisto
+			throw new IllegalArgumentException(e.getMessage());
+		}
+	}
 
 	@PostMapping("/libriFromExternalEndpoint")
 	public List<LibroDTO> libriFromExternalEndpoint() {
